@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: food-order-management
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+#      uri: ${MONGO_URI}
+      database: miniRestaurant
+      auto-index-creation: true
