@@ -25,6 +25,8 @@ public class CustomerSignUpDTO {
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid Email format")
     private String email;
+    @NotBlank(message = "Username is required")
+    private String userName;
 
     @NotBlank(message = "Password is required")
     private String password;

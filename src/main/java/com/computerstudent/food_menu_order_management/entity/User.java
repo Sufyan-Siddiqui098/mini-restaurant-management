@@ -27,6 +27,8 @@ public class User {
     @Indexed(unique = true)
     @NotNull(message = "Email is required")
     private String email;
+    @Indexed(unique = true)
+    private String userName;
     @NotNull(message = "Password is required")
     private String password;
     private String phone;
