@@ -27,6 +27,7 @@ public class UserService {
         return users.stream().map(user -> new UserResponseDTO(
                 user.getId(),
                 user.getEmail(),
+                user.getUserName(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getRoles(),

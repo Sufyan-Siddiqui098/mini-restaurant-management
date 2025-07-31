@@ -1,8 +1,8 @@
 package com.computerstudent.food_menu_order_management.controller;
 
+import com.computerstudent.food_menu_order_management.dto.LoginResponseDTO;
 import com.computerstudent.food_menu_order_management.dto.CustomerSignUpDTO;
 import com.computerstudent.food_menu_order_management.dto.UserLoginDTO;
-import com.computerstudent.food_menu_order_management.entity.User;
 import com.computerstudent.food_menu_order_management.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,12 @@ public class PublicController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO user) {
-        String authToken = authService.login(user);
-        return new ResponseEntity<>(authToken, HttpStatus.OK);
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody UserLoginDTO user) {
+        LoginResponseDTO loginResponseDTO = authService.login(user);
+        return new ResponseEntity<>(loginResponseDTO, HttpStatus.OK);
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/signup/customer")
     public ResponseEntity<?> customerSignup(@Valid @RequestBody CustomerSignUpDTO customer){
         String successMessage = authService.customerSignUp(customer);
         return new ResponseEntity<>(successMessage, HttpStatus.OK);

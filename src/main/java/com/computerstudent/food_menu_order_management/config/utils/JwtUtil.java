@@ -1,4 +1,4 @@
-package com.computerstudent.food_menu_order_management.utils;
+package com.computerstudent.food_menu_order_management.config.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

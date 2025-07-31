@@ -1,7 +1,7 @@
 package com.computerstudent.food_menu_order_management.filter;
 
-import com.computerstudent.food_menu_order_management.service.UserDetailsService;
-import com.computerstudent.food_menu_order_management.utils.JwtUtil;
+import com.computerstudent.food_menu_order_management.config.service.UserDetailsServiceImpl;
+import com.computerstudent.food_menu_order_management.config.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserDetailsService userDetailService;
+    private UserDetailsServiceImpl userDetailService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

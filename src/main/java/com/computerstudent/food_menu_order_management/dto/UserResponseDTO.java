@@ -20,6 +20,7 @@ import java.util.List;
 public class UserResponseDTO {
     private ObjectId id;
     private String email;
+    private String userName;
     private String firstName;
     private String lastName;
     private List<UserRole> roles;
