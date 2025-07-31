@@ -2,7 +2,7 @@ package com.computerstudent.food_menu_order_management.config;
 
 import com.computerstudent.food_menu_order_management.enums.UserRole;
 import com.computerstudent.food_menu_order_management.filter.JwtFilter;
-import com.computerstudent.food_menu_order_management.service.UserDetailsService;
+import com.computerstudent.food_menu_order_management.config.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +25,7 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
