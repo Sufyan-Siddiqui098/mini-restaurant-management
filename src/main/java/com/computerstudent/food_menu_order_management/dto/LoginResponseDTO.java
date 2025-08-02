@@ -26,7 +26,7 @@ public class LoginResponseDTO {
     private List<UserRole> roles;
     private String phone;
 
-    private Address address;
+//    private Address address;
     private String token;
 
 }

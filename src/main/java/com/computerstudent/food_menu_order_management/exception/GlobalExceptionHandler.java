@@ -37,6 +37,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleDuplicateResourceException(DuplicateResourceException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 Map.of(
+                        "error", ex.getMessage() != null ? ex.getMessage() : "Something's wrong",
                         "timestamp", LocalDateTime.now()
                 ));
     }
