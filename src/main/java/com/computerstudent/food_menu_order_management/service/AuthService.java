@@ -11,6 +11,7 @@ import com.computerstudent.food_menu_order_management.entity.CustomerDetails;
 import com.computerstudent.food_menu_order_management.entity.User;
 import com.computerstudent.food_menu_order_management.enums.UserRole;
 import com.computerstudent.food_menu_order_management.exception.DuplicateResourceException;
+import com.computerstudent.food_menu_order_management.exception.UserNotFoundException;
 import com.computerstudent.food_menu_order_management.repository.UserRepository;
 import com.computerstudent.food_menu_order_management.config.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,7 +73,7 @@ public class AuthService {
     public String chefSignUp(ChefSignUpDTO chef) {
 
         if (userRepository.existsByEmail(chef.getEmail()))
-            throw new DuplicateResourceException("Email already in use");
+            throw new DuplicateResourceException("Email already in exist");
         if (userRepository.existsByUserName(chef.getUserName()))
             throw new DuplicateResourceException("Username already exist");
 
@@ -111,7 +113,7 @@ public class AuthService {
                     userDetails.getUser().getLastName(),
                     userDetails.getUser().getRoles(),
                     userDetails.getUser().getPhone(),
-                    userDetails.getUser().getCustomerDetails().getAddress(),
+//                    userDetails.getUser().getCustomerDetails().getAddress(),
                     token
             );
 
@@ -119,5 +121,16 @@ public class AuthService {
             log.error("Error while login ", e);
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials", e);
         }
+    }
+
+    public User getCurrentUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User user = userRepository.findByEmail(email);
+        if(user == null){
+           throw new UserNotFoundException("Current user not found");
+        }
+        return user;
+
     }
 }
