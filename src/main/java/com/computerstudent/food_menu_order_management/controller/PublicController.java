@@ -1,5 +1,6 @@
 package com.computerstudent.food_menu_order_management.controller;
 
+import com.computerstudent.food_menu_order_management.dto.ChefSignUpDTO;
 import com.computerstudent.food_menu_order_management.dto.LoginResponseDTO;
 import com.computerstudent.food_menu_order_management.dto.CustomerSignUpDTO;
 import com.computerstudent.food_menu_order_management.dto.UserLoginDTO;
@@ -27,10 +28,16 @@ public class PublicController {
     }
 
     @PostMapping("/signup/customer")
-    public ResponseEntity<?> customerSignup(@Valid @RequestBody CustomerSignUpDTO customer){
+    public ResponseEntity<String> customerSignup(@Valid @RequestBody CustomerSignUpDTO customer){
         String successMessage = authService.customerSignUp(customer);
         return new ResponseEntity<>(successMessage, HttpStatus.OK);
 
+    }
+
+    @PostMapping("/signup/chef")
+    public ResponseEntity<String> chefSignUp(@Valid @RequestBody ChefSignUpDTO chef){
+        String successMessage = authService.chefSignUp(chef);
+        return new ResponseEntity<>(successMessage, HttpStatus.OK);
     }
 
 }
