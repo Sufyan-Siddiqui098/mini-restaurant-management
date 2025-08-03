@@ -2,6 +2,7 @@ package com.computerstudent.food_menu_order_management.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,6 +39,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(
                 Map.of(
                         "error", ex.getMessage() != null ? ex.getMessage() : "Something's wrong",
+                        "cause", ex.getCause() != null ? ex.getCause().getMessage() : "No root cause",
+                        "timestamp", LocalDateTime.now()
+                ));
+    }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of(
+                        "details", ex.getMessage(),
+                        "cause", ex.getCause() != null ? ex.getCause().getMessage() : "No root cause",
                         "timestamp", LocalDateTime.now()
                 ));
     }
