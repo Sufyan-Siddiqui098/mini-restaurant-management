@@ -27,6 +27,27 @@ public class UserService {
     private UserMapper userMapper;
 
 
+    // For Admin
+    public List<UserResponseDTO> getAllUser() {
+        User currentUser = authService.getCurrentUser();
+        boolean isAdmin = currentUser.getRoles().contains(UserRole.ADMIN);
+        if (!isAdmin) {
+            throw new AccessDeniedException("Unauthorized to fetch all users.");
+        }
+        List<User> users = userRepository.findAll();
+        return users.stream().map(user -> new UserResponseDTO(
+                user.getId(),
+                user.getEmail(),
+                user.getUserName(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getRoles(),
+                user.getPhone(),
+                user.getChefDetails(),
+                user.getCustomerDetails(),
+                user.getStaffDetails()
+        )).collect(Collectors.toList());
+    }
 
 
     // --- GET User
@@ -47,8 +68,22 @@ public class UserService {
     }
 
     // --- Delete User
-    public void deleteUserById(String id) {
+    public String deleteUserById(String id) {
+        ObjectId objectId = new ObjectId(id);
+        User currentUser = authService.getCurrentUser();
 
+        User user = userRepository.findById(objectId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID " + id));
+
+        // ---- Authorization check
+        boolean isSelf = currentUser.getId().equals(user.getId());
+        boolean isAdmin = currentUser.getRoles().contains(UserRole.ADMIN);
+
+        if (!isSelf && !isAdmin) {
+            throw new AccessDeniedException("Unauthorized User");
+        }
+        userRepository.deleteById(objectId);
+        return "User {" + user.getUserName() + "} is deleted.";
     }
 
 }
