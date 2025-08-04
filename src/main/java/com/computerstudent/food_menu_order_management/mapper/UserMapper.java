@@ -105,10 +105,13 @@ public class UserMapper {
         if (dto.getPhone() != null) userInDb.setPhone(dto.getPhone());
 
         if (isAdmin) {
-            if (dto.getRoles() != null && !dto.getRoles().isEmpty()){
+            if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
+                if (userInDb.getRoles().contains(UserRole.ADMIN) && !dto.getRoles().contains(UserRole.ADMIN)) {
+                    throw new UnsupportedOperationException("Cannot remove ADMIN role from the user.");
+                }
                 userInDb.setRoles(dto.getRoles());
-                if(!dto.getRoles().contains(UserRole.CHEF)) userInDb.setChefDetails(null);
-                if(!dto.getRoles().contains(UserRole.DELIVERY_STAFF)) userInDb.setStaffDetails(null);
+                if (!dto.getRoles().contains(UserRole.CHEF)) userInDb.setChefDetails(null);
+                if (!dto.getRoles().contains(UserRole.DELIVERY_STAFF)) userInDb.setStaffDetails(null);
             }
             if (dto.getChefDetails() != null)
                 userInDb.setChefDetails(dto.getChefDetails());
