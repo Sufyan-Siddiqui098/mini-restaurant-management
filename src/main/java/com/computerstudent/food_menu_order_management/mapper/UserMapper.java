@@ -1,10 +1,9 @@
 package com.computerstudent.food_menu_order_management.mapper;
 
-import com.computerstudent.food_menu_order_management.dto.ChefSignUpDTO;
-import com.computerstudent.food_menu_order_management.dto.CustomerSignUpDTO;
-import com.computerstudent.food_menu_order_management.dto.LoginResponseDTO;
-import com.computerstudent.food_menu_order_management.dto.UserResponseDTO;
+import com.computerstudent.food_menu_order_management.dto.*;
 import com.computerstudent.food_menu_order_management.entity.ChefDetails;
+import com.computerstudent.food_menu_order_management.entity.CustomerDetails;
+import com.computerstudent.food_menu_order_management.entity.StaffDetails;
 import com.computerstudent.food_menu_order_management.entity.User;
 import com.computerstudent.food_menu_order_management.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class UserMapper {
         return dto;
     }
 
-    public User fromCustomerSignupDTOtoUser(CustomerSignUpDTO customer){
+    public User fromCustomerSignupDTOtoUser(CustomerSignUpDTO customer) {
         User user = new User();
         user.setEmail(customer.getEmail());
         user.setUserName(customer.getUserName());
@@ -63,7 +62,7 @@ public class UserMapper {
         return user;
     }
 
-    public User fromChefSignupDTOtoUser(ChefSignUpDTO chef){
+    public User fromChefSignupDTOtoUser(ChefSignUpDTO chef) {
         User user = new User();
         user.setEmail(chef.getEmail());
         user.setUserName(chef.getUserName());
@@ -82,7 +81,7 @@ public class UserMapper {
         return user;
     }
 
-    public LoginResponseDTO fromUserToLoginResponseDTO(User user, String token){
+    public LoginResponseDTO fromUserToLoginResponseDTO(User user, String token) {
         LoginResponseDTO dto = new LoginResponseDTO();
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
@@ -96,4 +95,66 @@ public class UserMapper {
         return dto;
 
     }
+
+    public void updateUserFromDTO(UserUpdateDTO dto, User currentUser, User userInDb) {
+        boolean isSelf = currentUser.getId().equals(userInDb.getId());
+        boolean isAdmin = currentUser.getRoles().contains(UserRole.ADMIN);
+
+        if (dto.getFirstName() != null) userInDb.setFirstName(dto.getFirstName());
+        if (dto.getLastName() != null) userInDb.setLastName(dto.getLastName());
+        if (dto.getPhone() != null) userInDb.setPhone(dto.getPhone());
+
+        if (isAdmin) {
+            if (dto.getRoles() != null && !dto.getRoles().isEmpty()){
+                userInDb.setRoles(dto.getRoles());
+                if(!dto.getRoles().contains(UserRole.CHEF)) userInDb.setChefDetails(null);
+                if(!dto.getRoles().contains(UserRole.DELIVERY_STAFF)) userInDb.setStaffDetails(null);
+            }
+            if (dto.getChefDetails() != null)
+                userInDb.setChefDetails(dto.getChefDetails());
+            if (dto.getCustomerDetails() != null)
+                userInDb.setCustomerDetails(dto.getCustomerDetails());
+            if (dto.getStaffDetails() != null)
+                userInDb.setStaffDetails(dto.getStaffDetails());
+
+        } else if (isSelf) {
+            // Update Chef Details (Allowed Fields only)
+            if (userInDb.getRoles().contains(UserRole.CHEF)) {
+                ChefDetails updatedChefDetails = userInDb.getChefDetails();
+
+                if (updatedChefDetails == null)
+                    updatedChefDetails = new ChefDetails();
+                if (dto.getChefDetails() != null && dto.getChefDetails().getSpecialization() != null)
+                    updatedChefDetails.setSpecialization(dto.getChefDetails().getSpecialization());
+
+                userInDb.setChefDetails(updatedChefDetails);
+            }
+            // -- Update Customer Details (Allowed fields only)
+            if (userInDb.getRoles().contains(UserRole.CUSTOMER)) {
+                CustomerDetails updatedCustomerDetails = userInDb.getCustomerDetails();
+
+                if (updatedCustomerDetails == null)
+                    updatedCustomerDetails = new CustomerDetails();
+                if (dto.getCustomerDetails() != null && dto.getCustomerDetails().getAddress() != null)
+                    updatedCustomerDetails.setAddress(dto.getCustomerDetails().getAddress());
+
+                userInDb.setCustomerDetails(updatedCustomerDetails);
+            }
+
+            if (userInDb.getRoles().contains(UserRole.DELIVERY_STAFF)) {
+                StaffDetails updatedStaffDetails = userInDb.getStaffDetails();
+                if (updatedStaffDetails == null) {
+                    updatedStaffDetails = new StaffDetails();
+                }
+
+                if (dto.getStaffDetails() != null) {
+                    // something in future
+                }
+            }
+
+        }
+
+
+    }
+
 }
