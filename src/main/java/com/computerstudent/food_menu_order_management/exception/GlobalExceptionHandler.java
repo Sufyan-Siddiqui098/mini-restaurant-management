@@ -1,7 +1,9 @@
 package com.computerstudent.food_menu_order_management.exception;
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -72,8 +74,25 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(PasswordMismatchException.class)
-    public ResponseEntity<?> handlePasswordMismatchException(PasswordMismatchException ex){
+    public ResponseEntity<?> handlePasswordMismatchException(PasswordMismatchException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("error", "Password mismatch", "message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleJacksonDeserializationError(HttpMessageNotReadableException ex) {
+        Throwable cause = ex.getCause();
+
+        if (cause instanceof UnrecognizedPropertyException unrecognized) {
+            String fieldName = unrecognized.getPropertyName();
+            String message = "Unrecognized field: \"" + fieldName + "\". Please remove it or correct the name.";
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error", message));
+        }
+
+        return ResponseEntity
+                .badRequest()
+                .body(Map.of("error", "Malformed JSON request", "details", ex.getMessage()));
     }
 }
