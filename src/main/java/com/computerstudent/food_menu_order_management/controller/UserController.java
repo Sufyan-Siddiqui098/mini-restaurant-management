@@ -1,6 +1,8 @@
 package com.computerstudent.food_menu_order_management.controller;
 
+import com.computerstudent.food_menu_order_management.dto.PasswordUpdateDTO;
 import com.computerstudent.food_menu_order_management.dto.UserResponseDTO;
+import com.computerstudent.food_menu_order_management.dto.UserUpdateDTO;
 import com.computerstudent.food_menu_order_management.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,18 @@ public class UserController {
     public ResponseEntity<?> deleteUserById(@PathVariable String id) {
         String deletedMessage = userService.deleteUserById(id);
         return new ResponseEntity<>(deletedMessage, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUserById(@PathVariable String id, @RequestBody UserUpdateDTO userUpdate){
+        UserResponseDTO updatedUser = userService.updateUserById(id, userUpdate);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<?> updatePassword(@PathVariable String id, @RequestBody PasswordUpdateDTO dto){
+        String message = userService.updateUserPassword(id, dto);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
 }
