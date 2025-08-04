@@ -27,8 +27,8 @@ public class JwtUtil {
 //            principal = your full UserDetails
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-            // 5 minutes
-            long jwtExpirationMs = 1000 * 60 * 5;
+            // 30 minutes
+            long jwtExpirationMs = 1000 * 60 * 30;
             return Jwts.builder()
                     .subject(userDetails.getUsername())
                     // getAuthorities() returns a Collection<? extends GrantedAuthority> -- can cause a problem
