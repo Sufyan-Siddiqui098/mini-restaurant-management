@@ -43,6 +43,7 @@ public class GlobalExceptionHandler {
                         "timestamp", LocalDateTime.now()
                 ));
     }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDeniedException(Exception ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -62,5 +63,17 @@ public class GlobalExceptionHandler {
                         "cause", ex.getCause() != null ? ex.getCause().getMessage() : "No root cause",
                         "timestamp", LocalDateTime.now()
                 ));
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<?> handleInvalidCredentials(InvalidCredentialsException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Unauthorized", "message", ex.getMessage()));
+    }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public ResponseEntity<?> handlePasswordMismatchException(PasswordMismatchException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", "Password mismatch", "message", ex.getMessage()));
     }
 }
