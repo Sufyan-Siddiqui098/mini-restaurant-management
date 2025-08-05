@@ -160,4 +160,19 @@ public class UserMapper {
 
     }
 
+    public ChefResponseDTO toChefResponseDTO(User user){
+        ChefResponseDTO dto = new ChefResponseDTO();
+        dto.setId(user.getId());
+        dto.setUserName(user.getUserName());
+        dto.setEmail(user.getEmail());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setPhone(user.getPhone());
+        dto.setRoles(user.getRoles());
+
+        if(user.getChefDetails() != null) dto.setSpecialization(user.getChefDetails().getSpecialization());
+
+        return dto;
+    }
+
 }
