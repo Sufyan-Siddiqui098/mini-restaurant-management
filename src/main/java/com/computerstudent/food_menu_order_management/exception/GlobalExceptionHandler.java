@@ -25,6 +25,15 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(MenuNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFound(MenuNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "error", ex.getMessage(),
+                        "timestamp", LocalDateTime.now()
+                ));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
