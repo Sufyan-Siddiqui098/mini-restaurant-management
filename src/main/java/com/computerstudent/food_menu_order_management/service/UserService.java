@@ -89,8 +89,11 @@ public class UserService {
         User currentUser = authService.getCurrentUser();
         User user = userRepository.findById(objectId).orElseThrow(() -> new UserNotFoundException("User not find with ID " + id));
 
+        // ---- Authorization check
+        boolean isSelf = currentUser.getId().equals(user.getId());
+        boolean isAdmin = currentUser.getRoles().contains(UserRole.ADMIN);
         // ----- If not the same user or Admin
-        if (!currentUser.getId().equals(user.getId()) && !currentUser.getRoles().contains(UserRole.ADMIN)) {
+        if (!isSelf && !isAdmin) {
             throw new AccessDeniedException("Unauthorized User");
         }
 
