@@ -4,12 +4,14 @@ import com.computerstudent.food_menu_order_management.dto.PasswordUpdateByAdminD
 import com.computerstudent.food_menu_order_management.dto.PasswordUpdateDTO;
 import com.computerstudent.food_menu_order_management.dto.UserResponseDTO;
 import com.computerstudent.food_menu_order_management.dto.UserUpdateDTO;
+import com.computerstudent.food_menu_order_management.entity.MenuItem;
 import com.computerstudent.food_menu_order_management.entity.User;
 import com.computerstudent.food_menu_order_management.enums.UserRole;
 import com.computerstudent.food_menu_order_management.exception.InvalidCredentialsException;
 import com.computerstudent.food_menu_order_management.exception.PasswordMismatchException;
 import com.computerstudent.food_menu_order_management.exception.UserNotFoundException;
 import com.computerstudent.food_menu_order_management.mapper.UserMapper;
+import com.computerstudent.food_menu_order_management.repository.MenuItemRepository;
 import com.computerstudent.food_menu_order_management.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -19,8 +21,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +39,8 @@ public class UserService {
     private UserMapper userMapper;
     @Autowired
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private MenuItemService menuItemService;
 
 
     // ========= For Admin ======
@@ -103,6 +109,7 @@ public class UserService {
     }
 
     // --- Delete User
+    @Transactional
     public String deleteUserById(String id) {
         ObjectId objectId = new ObjectId(id);
         User currentUser = authService.getCurrentUser();
@@ -116,6 +123,11 @@ public class UserService {
 
         if (!isSelf && !isAdmin) {
             throw new AccessDeniedException("Unauthorized User");
+        }
+
+        // --- If the user being deleted is a CHEF, delete their menu items ---
+        if (user.getRoles().contains(UserRole.CHEF)) {
+            menuItemService.deleteAndReturnMenusByChef(user.getId());
         }
         userRepository.deleteById(objectId);
         return "User {" + user.getUserName() + "} is deleted.";
