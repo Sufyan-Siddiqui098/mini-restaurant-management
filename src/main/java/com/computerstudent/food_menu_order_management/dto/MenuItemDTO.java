@@ -1,15 +1,13 @@
 package com.computerstudent.food_menu_order_management.dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.bson.types.ObjectId;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class CreateMenuItemDTO {
+public class MenuItemDTO {
     @NotEmpty(message = "menu name is required ")
     private String name;
     @NotEmpty(message = "menu description is required ")
