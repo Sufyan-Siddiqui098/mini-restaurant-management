@@ -123,7 +123,7 @@ public class MenuItemService {
     }
 
     // Get Chef specific Menu item
-    public List<MenuItemResponseDTO> getActiveMenuItemOfChef(String chefId) {
+    public List<MenuItemResponseDTO> getActiveMenuItemOfChefGlobally(String chefId) {
         List<MenuItem> menuByChef = menuItemRepository.findByChef_Id(new ObjectId(chefId))
                 .orElseThrow(() -> new MenuNotFoundException("No menu under chef id " + chefId));
 
@@ -133,7 +133,7 @@ public class MenuItemService {
     }
 
     // ---- Get Menu By ID
-    public MenuItemResponseDTO getMenuItemById(String menuId) {
+    public MenuItemResponseDTO getMenuItemByIdGlobally(String menuId) {
         MenuItem menuItem = menuItemRepository.findById(new ObjectId(menuId))
                 .orElseThrow(() -> new MenuNotFoundException("Menu not found with id " + menuId));
         if(!menuItem.isAvailable())

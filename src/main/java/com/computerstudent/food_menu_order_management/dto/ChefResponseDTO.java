@@ -23,7 +23,7 @@ public class ChefResponseDTO {
     private String firstName;
     private String lastName;
     private List<UserRole> roles;
-    private String phone;
+//    private String phone;
 
     private List<String> specialization;
 

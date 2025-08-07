@@ -19,18 +19,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserResponseDTO {
+public class UserResponseDTO extends UserUpdateDTO{
     @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
     private String email;
-    private String userName;
-    private String firstName;
-    private String lastName;
-    private List<UserRole> roles;
-    private String phone;
 
-    // set specific field - not all field. (reminder)
-    private ChefDetails chefDetails;
-    private CustomerDetails customerDetails;
-    private StaffDetails staffDetails;
 }

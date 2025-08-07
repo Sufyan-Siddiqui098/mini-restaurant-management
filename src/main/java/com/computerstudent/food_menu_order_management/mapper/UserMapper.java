@@ -167,7 +167,7 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
-        dto.setPhone(user.getPhone());
+//        dto.setPhone(user.getPhone());
         dto.setRoles(user.getRoles());
 
         if(user.getChefDetails() != null) dto.setSpecialization(user.getChefDetails().getSpecialization());

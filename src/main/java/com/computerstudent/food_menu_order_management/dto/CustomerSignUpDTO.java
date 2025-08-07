@@ -15,8 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerSignUpDTO {
-    @Id
-    private ObjectId id;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid Email format")

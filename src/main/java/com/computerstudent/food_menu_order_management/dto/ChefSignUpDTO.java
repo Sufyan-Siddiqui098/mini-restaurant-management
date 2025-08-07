@@ -15,27 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChefSignUpDTO {
-
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid Email format")
-    private String email;
-    @NotBlank(message = "Username is required")
-    private String userName;
-
-    @NotBlank(message = "Password is required")
-    private String password;
-
-    @NotBlank(message = "Phone is required")
-    private String phone;
-
-    @NotBlank(message = "First name is required")
-    private String firstName;
-    @NotBlank(message = "Last name is required")
-    private String lastName;
-
-    private List<UserRole> roles ;
-
+public class ChefSignUpDTO extends CustomerSignUpDTO {
     @NotEmpty(message = "At least one specialization is required")
     private List<String> specialization;
 }

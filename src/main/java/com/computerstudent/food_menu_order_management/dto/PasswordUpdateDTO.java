@@ -5,12 +5,9 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class PasswordUpdateDTO {
+public class PasswordUpdateDTO extends PasswordUpdateByAdminDTO {
 
     @NotBlank(message = "Old password is required")
     private String oldPassword;
-    @NotBlank(message = "New password is required")
-    private String newPassword;
-    @NotBlank(message = "Confirm New password is required")
-    private String confirmNewPassword;
+
 }

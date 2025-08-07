@@ -4,14 +4,12 @@ import com.computerstudent.food_menu_order_management.dto.PasswordUpdateByAdminD
 import com.computerstudent.food_menu_order_management.dto.PasswordUpdateDTO;
 import com.computerstudent.food_menu_order_management.dto.UserResponseDTO;
 import com.computerstudent.food_menu_order_management.dto.UserUpdateDTO;
-import com.computerstudent.food_menu_order_management.entity.MenuItem;
 import com.computerstudent.food_menu_order_management.entity.User;
 import com.computerstudent.food_menu_order_management.enums.UserRole;
 import com.computerstudent.food_menu_order_management.exception.InvalidCredentialsException;
 import com.computerstudent.food_menu_order_management.exception.PasswordMismatchException;
 import com.computerstudent.food_menu_order_management.exception.UserNotFoundException;
 import com.computerstudent.food_menu_order_management.mapper.UserMapper;
-import com.computerstudent.food_menu_order_management.repository.MenuItemRepository;
 import com.computerstudent.food_menu_order_management.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -19,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,18 +48,9 @@ public class UserService {
             throw new AccessDeniedException("Unauthorized to fetch all users.");
         }
         List<User> users = userRepository.findAll();
-        return users.stream().map(user -> new UserResponseDTO(
-                user.getId(),
-                user.getEmail(),
-                user.getUserName(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getRoles(),
-                user.getPhone(),
-                user.getChefDetails(),
-                user.getCustomerDetails(),
-                user.getStaffDetails()
-        )).collect(Collectors.toList());
+        return users.stream()
+                .map(user -> userMapper.toUserResponseDTO(user))
+                .collect(Collectors.toList());
     }
 
     public String updateUserPasswordByAdmin(String id, PasswordUpdateByAdminDTO dto) {
