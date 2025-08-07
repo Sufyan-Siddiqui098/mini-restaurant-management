@@ -21,6 +21,7 @@ public class MenuMapper {
         response.setPrice(savedMenu.getPrice());
         response.setTags(savedMenu.getTags());
         response.setAvailable(savedMenu.isAvailable());
+        response.setQuantityUnit(savedMenu.getQuantityUnit());
         // Map user to Chef Response DTO
         ChefResponseDTO chefResponseDTO = userMapper.toChefResponseDTO(savedMenu.getChef());
         response.setChef(chefResponseDTO);
@@ -33,6 +34,7 @@ public class MenuMapper {
         menu.setName(dto.getName());
         menu.setDescription(dto.getDescription());
         menu.setPrice(dto.getPrice());
+        menu.setQuantityUnit(dto.getQuantityUnit());
         menu.setTags(dto.getTags());
         menu.setAvailable(dto.isAvailable());
         menu.setChef(chef);
@@ -50,6 +52,8 @@ public class MenuMapper {
             menuItemInDb.setTags(dto.getTags());
         if (dto.getPrice() != null && !dto.getPrice().equals(menuItemInDb.getPrice()))
             menuItemInDb.setPrice(dto.getPrice());
+        if(dto.getQuantityUnit() != null && !dto.getQuantityUnit().equals(menuItemInDb.getQuantityUnit()))
+            menuItemInDb.setQuantityUnit(dto.getQuantityUnit());
         if (dto.isAvailable() != menuItemInDb.isAvailable())
             menuItemInDb.setAvailable(dto.isAvailable());
     }

@@ -3,6 +3,7 @@ package com.computerstudent.food_menu_order_management.controller;
 import com.computerstudent.food_menu_order_management.dto.MenuItemDTO;
 import com.computerstudent.food_menu_order_management.dto.MenuItemResponseDTO;
 import com.computerstudent.food_menu_order_management.service.MenuItemService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class MenuItemController {
 
     // POST /chefs/{chefId}/menu-items
     @PostMapping
-    public ResponseEntity<?> createMenuItemOfChef(@PathVariable String chefId, @RequestBody MenuItemDTO createMenu) {
+    public ResponseEntity<?> createMenuItemOfChef(@PathVariable String chefId,@Valid @RequestBody MenuItemDTO createMenu) {
         MenuItemResponseDTO menuItemForChef = menuItemService.createMenuItemForChef(chefId, createMenu);
         return new ResponseEntity<>(menuItemForChef, HttpStatus.OK);
     }
